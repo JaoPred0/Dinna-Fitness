@@ -1,8 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { PlusCircle, Edit3 } from "lucide-react";
-
+import { useEffect } from "react";
 const DashboardProdutos = () => {
+  useEffect(() => {
+      document.title = "Dashboard - Produtos"; // muda o título da aba do navegador
+    }, []);
   return (
     <div className="p-8 grid grid-cols-1 sm:grid-cols-2 gap-6 min-h-screen">
       {/* Card Gerenciar Produtos */}

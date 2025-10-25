@@ -24,6 +24,8 @@ import Carrinho from "./pages/Carrinho";
 import CategoriaProdutos from "./pages/CategoriaProdutos";
 import NotFound from "./pages/NotFound";
 import Contato from "./pages/Contato";
+import DashboardBanner from "./components/DashboardBanner";
+import DashboardNavbarEdit from "./components/DashboardNavbarEdit";
 
 // === Contexto de Autenticação ===
 const AuthContext = createContext();
@@ -147,6 +149,30 @@ const App = () => {
                 <AdminLayout>
                   <DashboardLayout>
                     <DashboardSite />
+                  </DashboardLayout>
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/site/banner"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <DashboardLayout>
+                    <DashboardBanner />
+                  </DashboardLayout>
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/site/navbar"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <DashboardLayout>
+                    <DashboardNavbarEdit />
                   </DashboardLayout>
                 </AdminLayout>
               </AdminRoute>

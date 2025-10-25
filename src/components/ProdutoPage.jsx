@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../config/firebase";
+import { doc, setDoc, getDoc, updateDoc, arrayUnion, } from "firebase/firestore";
+import { db, auth } from "../config/firebase";
 import { motion } from "framer-motion";
 import { ShoppingCart, ArrowLeft } from "lucide-react";
+import { useCart } from "../context/CartContext";
 
 const ProdutoPage = () => {
   const { id } = useParams();
@@ -12,6 +13,10 @@ const ProdutoPage = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const { cartItems, addToCart } = useCart();
+
+
 
   // busca produto
   useEffect(() => {
@@ -48,11 +53,61 @@ const ProdutoPage = () => {
     }
   }, [produto]);
 
-  const handleAddToCart = () => {
-    if (produto) {
-      console.log("Adicionado ao carrinho:", { ...produto, quantity: 1 });
+  const handleAddToCart = async () => {
+    if (!selectedSize && produto.sizes?.length > 0) {
+      alert("Selecione um tamanho antes de adicionar ao carrinho.");
+      return;
+    }
+
+    const item = {
+      id: produto.id ?? "",                  // string vazia se undefined
+      title: produto.title ?? "",
+      price: parseFloat(produto.price) || 0,
+      quantity: 1,
+      images: produto.images || [],
+    };
+
+    // Adiciona selectedSize só se não for undefined
+    if (selectedSize) {
+      item.selectedSize = selectedSize;
+    }
+
+    // Remove qualquer campo undefined do objeto (extra segurança)
+    Object.keys(item).forEach(key => {
+      if (item[key] === undefined) delete item[key];
+    });
+
+
+
+    // Adiciona ao contexto
+    addToCart(item);
+
+    // Salva no Firestore
+    if (!auth.currentUser) {
+      alert("Você precisa estar logado para salvar o carrinho.");
+      return;
+    }
+
+    try {
+      const userCartRef = doc(db, "carts", auth.currentUser.uid);
+      const userCartSnap = await getDoc(userCartRef);
+
+      if (userCartSnap.exists()) {
+        await updateDoc(userCartRef, {
+          items: arrayUnion(item),
+        });
+      } else {
+        await setDoc(userCartRef, { items: [item] });
+      }
+
+      alert("Produto adicionado ao carrinho e salvo no Firebase!");
+    } catch (error) {
+      console.error("Erro ao salvar no Firestore:", error);
+      alert("Erro ao salvar no carrinho.");
     }
   };
+
+
 
   if (loading) {
     return (
@@ -129,11 +184,10 @@ const ProdutoPage = () => {
                 <motion.button
                   key={idx}
                   onClick={() => setSelectedImage(idx)}
-                  className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 shadow-sm ${
-                    selectedImage === idx
-                      ? "border-black"
-                      : "border-gray-300 hover:border-gray-500"
-                  }`}
+                  className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 shadow-sm ${selectedImage === idx
+                    ? "border-black"
+                    : "border-gray-300 hover:border-gray-500"
+                    }`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -171,17 +225,22 @@ const ProdutoPage = () => {
               </h3>
               <div className="flex flex-wrap gap-2">
                 {produto.sizes.map((size, idx) => (
-                  <motion.span
+                  <motion.button
                     key={idx}
-                    className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium cursor-pointer transition-colors border border-gray-300"
+                    className={`px-4 py-2 rounded-full border text-sm font-medium transition-colors
+            ${selectedSize === size
+                        ? "bg-black text-white border-black"
+                        : "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"}`}
+                    onClick={() => setSelectedSize(size)}
                     whileHover={{ scale: 1.05 }}
                   >
                     {size}
-                  </motion.span>
+                  </motion.button>
                 ))}
               </div>
             </div>
           )}
+
 
           {/* Políticas */}
           {produto.policies && (
@@ -205,27 +264,33 @@ const ProdutoPage = () => {
           )}
 
           {/* Botões */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row gap-4 pt-6">
+            {/* Adicionar ao carrinho */}
             <motion.button
               onClick={handleAddToCart}
-              className="flex-1 px-8 py-4 rounded-full bg-black hover:bg-gray-800 text-white font-bold text-lg shadow-md transition-all duration-300 flex items-center justify-center gap-2"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              className="flex-1 px-6 py-4 rounded-2xl bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold text-lg shadow-lg transition-all duration-300 flex items-center justify-center gap-3"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               <ShoppingCart size={24} />
               Adicionar ao carrinho
             </motion.button>
 
+            {/* Comprar Agora */}
             <motion.button
-              onClick={() => navigate(-1)}
-              className="px-8 py-4 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold text-lg shadow-sm transition-all duration-300 flex items-center justify-center gap-2"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                handleAddToCart();
+                navigate("/checkout");
+              }}
+              className="flex-1 px-6 py-4 rounded-2xl bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-bold text-lg shadow-lg transition-all duration-300 flex items-center justify-center gap-3"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <ArrowLeft size={20} />
-              Voltar
+              <ShoppingCart size={24} />
+              Comprar Agora
             </motion.button>
           </div>
+
         </motion.div>
       </div>
     </div>

@@ -7,7 +7,6 @@ const navLinks = [
     { label: "Produtos", href: "/produtos" },
     { label: "Contato", href: "/contato" },
     { label: "Políticas", href: "/politicas" },
-    { label: "Lançamentos", href: "/lancamentos" },
 ];
 
 const paymentMethods = [
@@ -21,13 +20,8 @@ const paymentMethods = [
     { src: "/pix.png", alt: "Pix" },
 ];
 
-// const shippingMethods = [
-//   { src: "/imagens/nuvemenvio.png", alt: "Nuvem Envio" },
-//   { src: "/imagens/frenet.png", alt: "Frenet" },
-// ];
-
 const contacts = [
-    { icon: <FaPhone />, text: "(77) 99143-3170" },
+    { icon: <FaPhone />, text: "(67) 9968-9143" },
     { icon: <FaEnvelope />, text: "dinna.fitness.store@gmail.com" },
 ];
 
@@ -65,13 +59,6 @@ const Footer = () => {
                             />
                         ))}
                     </div>
-
-                    {/* <h3 className="font-bold mb-4 uppercase">Formas de Envio</h3>
-          <div className="flex gap-2">
-            {shippingMethods.map((method, i) => (
-              <img key={i} src={method.src} alt={method.alt} className="h-10"/>
-            ))}
-          </div> */}
                 </div>
 
                 {/* Contato */}

@@ -1,8 +1,12 @@
 import React from "react";
 import DashboardCards from "../../components/DashboardCards";
 import { motion } from 'framer-motion';  
+import { useEffect } from "react";
 
 const DashboardAdmin = () => {  
+  useEffect(() => {
+    document.title = "Dashboard - Visão Geral"; // muda o título da aba do navegador
+  }, []);
   return (  
     <>  
       <motion.h1 className="text-3xl font-bold text-gray-900 mb-6">Bem-vindo ao Dashboard da Loja</motion.h1>  

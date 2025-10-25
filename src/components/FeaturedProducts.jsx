@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { ShoppingCart, ArrowRight } from "lucide-react";
-
+import ProdutoCard from "./ProdutoCard";
 const FeaturedProducts = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -124,56 +124,7 @@ const FeaturedProducts = () => {
         >
           {featuredProducts.map((product) => (
             <SwiperSlide key={product.id}>
-              <Link to={`/produtos/${product.id}`} className="block w-full h-full">
-                <motion.div
-                  className="bg-white rounded-3xl shadow-lg hover:shadow-2xl p-6 flex flex-col items-center h-full transition-all duration-300 group relative overflow-hidden"
-                  whileHover={{ y: -10, scale: 1.02 }}
-                  layout
-                >
-                  <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden mb-4 bg-gray-100 group-hover:scale-105 transition-transform duration-500">
-                    <img
-                      src={product.images?.[0] || "/placeholder.png"}
-                      alt={product.title}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.target.src = "/placeholder.png";
-                      }}
-                    />
-                  </div>
-
-                  <h3 className="text-gray-800 font-semibold text-base md:text-lg text-center mb-2 line-clamp-2">
-                    {product.title}
-                  </h3>
-
-                  <p className="text-black font-bold text-lg md:text-xl mb-4">
-                    R$ {parseFloat(product.price).toFixed(2).replace(".", ",")}
-                  </p>
-
-                  {/* Tamanhos */}
-                  {product.sizes && product.sizes.length > 0 && (
-                    <div className="flex flex-wrap justify-center gap-2 mb-4">
-                      {product.sizes.map((size, idx) => (
-                        <span
-                          key={idx}
-                          className="px-3 py-1 bg-gray-100 border border-gray-300 text-gray-700 rounded-full text-xs font-medium hover:bg-black hover:text-white transition-all cursor-pointer"
-                        >
-                          {size}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  <motion.button
-                    onClick={(e) => handleAddToCart(product, e)}
-                    className="px-6 py-3 rounded-full font-bold bg-black text-white hover:bg-white hover:text-black border-2 border-black transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2 w-full md:w-auto"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <ShoppingCart size={20} />
-                    Adicionar ao carrinho
-                  </motion.button>
-                </motion.div>
-              </Link>
+              <ProdutoCard produto={product} />
             </SwiperSlide>
           ))}
 

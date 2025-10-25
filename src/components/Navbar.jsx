@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { auth } from "../config/firebase";
+import { auth, db } from "../config/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useCart } from "../context/CartContext";
 import {
@@ -15,6 +16,7 @@ import {
   Menu,
   X,
   ChevronDown,
+  Clock,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -25,6 +27,8 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { cartItems } = useCart();
+  const [config, setConfig] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(0);
 
   const accountRef = useRef(null);
   const logoRef = useRef(null);
@@ -67,6 +71,47 @@ const Navbar = () => {
     });
     return () => unsubscribe();
   }, []);
+  useEffect(() => {
+    const loadConfig = async () => {
+      const snap = await getDoc(doc(db, "config", "site"));
+      if (snap.exists() && snap.data().bannerConfig) {
+        const cfg = snap.data().bannerConfig;
+        setConfig(cfg);
+        setTimeLeft(cfg.timeLeft ?? 0);
+      }
+    };
+
+    // Tenta primeiro localStorage para pré-visualização rápida
+    const local = localStorage.getItem("bannerConfig");
+    if (local) {
+      const cfg = JSON.parse(local);
+      setConfig(cfg);
+      setTimeLeft(cfg.timeLeft ?? 0);
+    } else {
+      loadConfig();
+    }
+  }, []);
+
+  // Contador regressivo opcional
+  useEffect(() => {
+    if (!config || !config.isVisible || !config.useTimer || timeLeft <= 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((t) => t - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [config, timeLeft]);
+
+  // Formata segundos para mm:ss
+  const formatTime = (s) => {
+    const m = Math.floor(s / 60).toString().padStart(2, "0");
+    const sec = (s % 60).toString().padStart(2, "0");
+    return `${m}:${sec}`;
+  };
+
+  if (!config || !config.isVisible) return null;
+
 
   const toggleAccountMenu = () => setIsAccountOpen(!isAccountOpen);
   const handleSignOut = async () => await signOut(auth);
@@ -91,24 +136,32 @@ const Navbar = () => {
   return (
     <header className="fixed top-0 left-0 w-full bg-gradient-to-r from-gray-900 via-black/90 to-gray-900/95 text-white shadow-md z-[9999]">
       <AnimatePresence>
-        {!isScrolled && (
-          <motion.div
-            className="banner-freight bg-green-700 text-center text-sm py-2.5 font-bold text-white shadow-md border-b border-green-400/30 relative z-[10000]"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }} // sobe mais ao desaparecer
-            transition={{ duration: 0.4 }}
-          >
-            🚀 FRETE GRÁTIS EM COMPRAS ACIMA DE R$200 – CORRA!
-          </motion.div>
-        )}
+        <motion.div
+          className="w-full text-center text-sm font-bold py-2.5 shadow-md border-b border-white/20 z-[500]"
+          style={{
+            backgroundColor: config.bgColor || "#047857",
+            color: config.textColor || "#ffffff",
+          }}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -50 }}
+          transition={{ duration: 0.3 }}
+        >
+          {config.bannerText || "Digite algo..."}{" "}
+          {config.useTimer && timeLeft > 0 && (
+            <span className="ml-2 opacity-80">
+              <Clock className="inline w-4 h-4 mr-1" />
+              {formatTime(timeLeft)}
+            </span>
+          )}
+        </motion.div>
       </AnimatePresence>
 
       {/* Barra de contato */}
       <AnimatePresence>
         {!isScrolled && (
           <motion.div
-            className="hidden sm:flex items-center justify-between px-6 py-2.5 text-xs bg-black/40 backdrop-blur-md border-b border-white/10 shadow-sm z-[10001]"
+            className="hidden sm:flex items-center justify-between px-6 py-2.5 text-xs bg-black/40 backdrop-blur-md border-b border-white/10 shadow-sm"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -50 }} // sobe mais ao desaparecer
@@ -139,10 +192,10 @@ const Navbar = () => {
 
       {/* Navbar */}
 
-      <nav className="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 max-w-7xl mx-auto relative z-[10002]">
-        <div ref={logoRef} className="text-xl sm:text-2xl font-black cursor-pointer select-none">
+      <nav className="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 max-w-7xl mx-auto relative">
+        <Link to="/" className="text-xl sm:text-2xl font-black cursor-pointer select-none">
           <span className="text-yellow-400">Dinna</span> <span>Fitness</span>
-        </div>
+        </Link>
 
         <ul ref={navLinksRef} className="hidden lg:flex gap-8 font-semibold text-sm sm:text-base">
           {navLinks.map((link) => (
@@ -162,7 +215,7 @@ const Navbar = () => {
                   {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
                 </span>
               )}
-            </Link> 
+            </Link>
           </div>
 
           {/* Conta */}
