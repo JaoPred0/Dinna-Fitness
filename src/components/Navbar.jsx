@@ -34,15 +34,15 @@ const Navbar = () => {
   const logoRef = useRef(null);
   const navLinksRef = useRef(null);
   const mobileMenuRef = useRef(null);
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50); // some se passar de 50px
-    };
 
+  // Detecta scroll
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Animações de entrada
   useEffect(() => {
     gsap.fromTo(
       logoRef.current,
@@ -57,20 +57,25 @@ const Navbar = () => {
     );
 
     const handleClickOutside = (event) => {
-      if (accountRef.current && !accountRef.current.contains(event.target)) setIsAccountOpen(false);
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) setIsMenuOpen(false);
+      if (accountRef.current && !accountRef.current.contains(event.target))
+        setIsAccountOpen(false);
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target))
+        setIsMenuOpen(false);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Observa usuário logado
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) =>
+      setUser(currentUser)
+    );
     return () => unsubscribe();
   }, []);
+
+  // Carrega config do Firestore ou localStorage
   useEffect(() => {
     const loadConfig = async () => {
       const snap = await getDoc(doc(db, "config", "site"));
@@ -81,37 +86,31 @@ const Navbar = () => {
       }
     };
 
-    // Tenta primeiro localStorage para pré-visualização rápida
     const local = localStorage.getItem("bannerConfig");
     if (local) {
       const cfg = JSON.parse(local);
       setConfig(cfg);
       setTimeLeft(cfg.timeLeft ?? 0);
-    } else {
-      loadConfig();
-    }
+    } else loadConfig();
   }, []);
 
-  // Contador regressivo opcional
+  // Contador regressivo
   useEffect(() => {
-    if (!config || !config.isVisible || !config.useTimer || timeLeft <= 0) return;
-
-    const timer = setInterval(() => {
-      setTimeLeft((t) => t - 1);
-    }, 1000);
-
+    if (!config || !config.isVisible || !config.useTimer || timeLeft <= 0)
+      return;
+    const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
     return () => clearInterval(timer);
   }, [config, timeLeft]);
 
-  // Formata segundos para mm:ss
   const formatTime = (s) => {
-    const m = Math.floor(s / 60).toString().padStart(2, "0");
+    const m = Math.floor(s / 60)
+      .toString()
+      .padStart(2, "0");
     const sec = (s % 60).toString().padStart(2, "0");
     return `${m}:${sec}`;
   };
 
   if (!config || !config.isVisible) return null;
-
 
   const toggleAccountMenu = () => setIsAccountOpen(!isAccountOpen);
   const handleSignOut = async () => await signOut(auth);
@@ -134,55 +133,75 @@ const Navbar = () => {
     ];
 
   return (
-    <header className="fixed top-0 left-0 w-full bg-gradient-to-r from-gray-900 via-black/90 to-gray-900/95 text-white shadow-md z-[9999]">
+    <header className={`fixed top-0 left-0 w-full transition-all duration-300 z-[9999] text-white shadow-md`}>
+      {/* Banner configurável */}
       <AnimatePresence>
-        <motion.div
-          className="w-full text-center text-sm font-bold py-2.5 shadow-md border-b border-white/20 z-[500]"
-          style={{
-            backgroundColor: config.bgColor || "#047857",
-            color: config.textColor || "#ffffff",
-          }}
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -50 }}
-          transition={{ duration: 0.3 }}
-        >
-          {config.bannerText || "Digite algo..."}{" "}
-          {config.useTimer && timeLeft > 0 && (
-            <span className="ml-2 opacity-80">
-              <Clock className="inline w-4 h-4 mr-1" />
-              {formatTime(timeLeft)}
-            </span>
-          )}
-        </motion.div>
+        {config.isVisible && (
+          <motion.div
+            className="w-full text-center text-sm font-bold py-2.5 shadow-md border-b border-white/20"
+            style={{
+              backgroundColor: config.bgColor || "#047857",
+              color: config.textColor || "#ffffff",
+            }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            transition={{ duration: 0.3 }}
+          >
+            {config.bannerText || "Digite algo..."}{" "}
+            {config.useTimer && timeLeft > 0 && (
+              <span className="ml-2 opacity-80">
+                <Clock className="inline w-4 h-4 mr-1" />
+                {formatTime(timeLeft)}
+              </span>
+            )}
+          </motion.div>
+        )}
       </AnimatePresence>
 
       {/* Barra de contato */}
       <AnimatePresence>
         {!isScrolled && (
           <motion.div
-            className="hidden sm:flex items-center justify-between px-6 py-2.5 text-xs bg-black/40 backdrop-blur-md border-b border-white/10 shadow-sm"
+            className="topbar hidden sm:flex items-center justify-between px-6 py-2.5 text-xs border-b border-white/10"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }} // sobe mais ao desaparecer
+            exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.4 }}
           >
             <div className="flex items-center gap-6">
-              <a href="tel:+556799689143" className="flex items-center gap-2 hover:text-yellow-300 transition">
+              <a
+                href="tel:+556799689143"
+                className="flex items-center gap-2 fonte2 transition"
+              >
                 <Phone size={14} className="text-emerald-400" /> (67) 9968-9143
               </a>
-              <a href="mailto:contato@dinnafitness.com" className="flex items-center gap-2 hover:text-yellow-300 transition">
-                <Mail size={14} className="text-blue-400" /> dinna.fitness.store@gmail.com
+              <a
+                href="mailto:dinna.fitness.store@gmail.com"
+                className="flex items-center gap-2 fonte2 transition"
+              >
+                <Mail size={14} className="text-blue-400" />{" "}
+                dinna.fitness.store@gmail.com
               </a>
             </div>
 
-            <div className="flex items-center gap-4 text-yellow-300 font-semibold">
+            <div className="flex items-center gap-4 fonte2 font-semibold">
               {user ? (
-                <span>Bem-vindo(a), {user.displayName || user.email.split("@")[0]} 👋</span>
+                <span>
+                  Bem-vindo(a), {user.displayName || user.email.split("@")[0]} 👋
+                </span>
               ) : (
                 <>
-                  <a href="/cadastro" className="hover:text-yellow-100 transition">Cadastre-se</a> |{" "}
-                  <a href="/login" className="hover:text-yellow-100 transition">Entrar</a>
+                  <a
+                    href="/cadastro"
+                    className="fonte2 transition"
+                  >
+                    Cadastre-se
+                  </a>{" "}
+                  |{" "}
+                  <a href="/login" className="fonte2 transition">
+                    Entrar
+                  </a>
                 </>
               )}
             </div>
@@ -190,45 +209,62 @@ const Navbar = () => {
         )}
       </AnimatePresence>
 
-      {/* Navbar */}
-
+      {/* Navbar principal */}
       <nav className="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 max-w-7xl mx-auto relative">
-        <Link to="/" className="text-xl sm:text-2xl font-black cursor-pointer select-none">
-          <span className="text-yellow-400">Dinna</span> <span>Fitness</span>
+        <Link to="/" className="flex items-center gap-2 select-none" ref={logoRef}>
+          <img
+            src="./logo.svg"
+            alt="Dinna Fitness Logo"
+            className="h-10 w-auto sm:h-12 object-contain"
+          />
         </Link>
 
-        <ul ref={navLinksRef} className="hidden lg:flex gap-8 font-semibold text-sm sm:text-base">
+        {/* Links desktop */}
+        <ul
+          ref={navLinksRef}
+          className="hidden lg:flex gap-8 font-semibold text-sm sm:text-base"
+        >
           {navLinks.map((link) => (
             <li key={link.href}>
-              <a href={link.href} className="hover:text-yellow-300 transition">{link.label}</a>
+              <a
+                href={link.href}
+                className="fonte2 transition-colors"
+              >
+                {link.label}
+              </a>
             </li>
           ))}
         </ul>
 
+        {/* Ações */}
         <div className="flex items-center gap-3 sm:gap-4">
           {/* Carrinho */}
-          <div className="relative cursor-pointer group">
-            <Link to="/carrinho" className="relative cursor-pointer group">
-              <ShoppingCart className="w-5 h-5 text-yellow-300" />
-              {cartItems.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-black w-5 h-5 flex items-center justify-center rounded-full">
-                  {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
-                </span>
-              )}
-            </Link>
-          </div>
+          <Link to="/carrinho" className="relative group">
+            <ShoppingCart className="w-5 h-5 fonte2" />
+            {cartItems.length > 0 && (
+              <span className="absolute -top-3 -right-3 bg-red-500 text-white text-xs font-black w-5 h-5 flex items-center justify-center rounded-full">
+                {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
+              </span>
+            )}
+          </Link>
 
           {/* Conta */}
           <div ref={accountRef} className="relative">
-            <button onClick={toggleAccountMenu} className="flex items-center gap-1 p-2 rounded-xl bg-white/10 hover:bg-white/20 transition">
-              <User className="w-5 h-5 text-gray-300" />
-              <ChevronDown className={`w-4 h-4 transition-transform ${isAccountOpen ? "rotate-180" : ""}`} />
+            <button
+              onClick={toggleAccountMenu}
+              className="flex items-center gap-1 p-2 rounded-xl card3 transition"
+            >
+              <User className="w-5 h-5 fonte2" />
+              <ChevronDown
+                className={`w-4 h-4 fonte2 transition-transform ${isAccountOpen ? "rotate-180" : ""
+                  }`}
+              />
             </button>
 
             <AnimatePresence>
               {isAccountOpen && (
                 <motion.div
-                  className="absolute right-0 top-full mt-2 w-56 bg-gray-800 rounded-xl shadow-lg overflow-hidden"
+                  className="absolute right-0 top-full mt-2 w-56 topbar rounded-xl shadow-lg overflow-hidden"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
@@ -238,11 +274,19 @@ const Navbar = () => {
                     {accountMenuItems.map((item) => {
                       const Icon = item.icon;
                       return item.action ? (
-                        <button key={item.label} onClick={item.action} className="flex items-center gap-2 px-4 py-2 w-full text-left text-gray-300 hover:bg-yellow-500/10 hover:text-yellow-300 transition">
+                        <button
+                          key={item.label}
+                          onClick={item.action}
+                          className="flex items-center gap-2 fonte2 px-4 py-2 w-full text-left font2 transition"
+                        >
                           <Icon className="w-4 h-4" /> {item.label}
                         </button>
                       ) : (
-                        <a key={item.label} href={item.href} className="flex items-center gap-2 px-4 py-2 text-gray-300 hover:bg-yellow-500/10 hover:text-yellow-300 transition">
+                        <a
+                          key={item.label}
+                          href={item.href}
+                          className="flex items-center gap-2 fonte2 px-4 py-2 font2 transition"
+                        >
                           <Icon className="w-4 h-4" /> {item.label}
                         </a>
                       );
@@ -253,8 +297,11 @@ const Navbar = () => {
             </AnimatePresence>
           </div>
 
-          {/* Botão Mobile */}
-          <button className="lg:hidden p-2 rounded-xl bg-white/10 hover:bg-white/20 transition" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          {/* Botão menu mobile */}
+          <button
+            className="lg:hidden p-2 rounded-xl fonte2 transition"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
@@ -267,9 +314,9 @@ const Navbar = () => {
             ref={mobileMenuRef}
             className="lg:hidden fixed inset-0 bg-black/90 flex flex-col items-center justify-center space-y-8 px-6 py-12"
             initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}  // sem x ou translate
+            animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.3 }}       // apenas fade/scale suave
+            transition={{ duration: 0.3 }}
           >
             <button
               onClick={() => setIsMenuOpen(false)}
@@ -282,7 +329,7 @@ const Navbar = () => {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-2xl font-bold text-yellow-300 hover:text-orange-400 transition"
+                className="text-2xl font-bold font1 transition"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {link.label}
@@ -291,20 +338,20 @@ const Navbar = () => {
 
             <div className="flex flex-col items-center gap-4 pt-8 border-t border-white/20">
               {user ? (
-                <span className="text-xl text-yellow-300 font-semibold">
+                <span className="text-xl font2 font-semibold">
                   Bem-vindo, {user.displayName || user.email.split("@")[0]} 👋
                 </span>
               ) : (
                 <>
                   <a
                     href="/login"
-                    className="px-6 py-3 bg-yellow-500 text-black font-bold rounded-xl hover:bg-yellow-400"
+                    className="px-6 py-3 font2 text-black font-bold rounded-xl"
                   >
                     Entrar
                   </a>
                   <a
                     href="/cadastro"
-                    className="px-6 py-3 border-2 border-yellow-500 text-yellow-300 font-bold rounded-xl hover:bg-yellow-500 hover:text-black"
+                    className="px-6 py-3 border-2 font2 hover:text-black"
                   >
                     Cadastre-se
                   </a>

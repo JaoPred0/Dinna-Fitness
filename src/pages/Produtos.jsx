@@ -71,7 +71,7 @@ const Produtos = () => {
 
   return (
     <div className="p-6 min-h-screen">
-      <h2 className="text-2xl font-bold mb-6 text-gray-900">Produtos</h2>
+      <h2 className="text-3xl text-center font-bold mb-6 title">Produtos</h2>
 
       {/* Filtros */}
       <div className="flex flex-col md:flex-row gap-4 mb-6">

@@ -27,7 +27,7 @@ const contacts = [
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-900 text-white relative">
+        <footer className=" relative">
 
             {/* Conteúdo principal */}
             <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -55,7 +55,7 @@ const Footer = () => {
                                 key={i}
                                 src={method.src}
                                 alt={method.alt}
-                                className="h-10 md:h-11 transition-transform duration-300 hover:scale-105"
+                                className="h-10 md:h-11 transition-transform duration-300 hover:scale-105 rounded-lg"
                             />
                         ))}
                     </div>
@@ -75,20 +75,20 @@ const Footer = () => {
             </div>
 
             {/* Rodapé */}
-            <div className="border-t border-gray-700 mt-6 py-4 text-sm text-gray-400 flex flex-col md:flex-row justify-between items-center px-6">
+            <div className="border-t border-gray-700 mt-6 py-4 text-sm flex flex-col md:flex-row justify-between items-center px-6">
                 {/* Copyright */}
-                <span className="text-gray-300">
+                <span className="">
                     © 2025 Dinna Fitness - (67) 9968-9143. Todos os direitos reservados.
                 </span>
 
                 {/* Desenvolvedor */}
-                <span className="mt-2 md:mt-0 text-gray-300">
+                <span className="mt-2 md:mt-0">
                     Criado pelo programador FullStack{" "}
                     <a
                         href="https://github.com/JaoPred0"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-yellow-400 hover:text-yellow-300 transition-colors underline"
+                        className="title transition-colors underline"
                     >
                         JaooPredo
                     </a>

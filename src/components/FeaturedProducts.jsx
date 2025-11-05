@@ -54,9 +54,9 @@ const FeaturedProducts = () => {
 
   if (loading) {
     return (
-      <div className="w-full py-12 px-4 bg-gray-50 flex items-center justify-center">
+      <div className="w-full py-12 px-4 flex items-center justify-center">
         <motion.div
-          className="text-gray-600 text-xl animate-pulse"
+          className="fonte1 text-xl animate-pulse"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -69,9 +69,9 @@ const FeaturedProducts = () => {
 
   if (error) {
     return (
-      <div className="w-full py-12 px-4 bg-gray-50 flex items-center justify-center">
+      <div className="w-full py-12 px-4 flex items-center justify-center">
         <motion.div
-          className="text-center text-gray-600 max-w-md"
+          className="text-center fonte1 max-w-md"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
@@ -79,7 +79,7 @@ const FeaturedProducts = () => {
           <p className="text-xl mb-4">{error}</p>
           <button
             onClick={fetchFeaturedProducts}
-            className="px-6 py-2 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
+            className="px-6 py-2  text-white rounded-full transition-colors"
           >
             Tentar novamente
           </button>
@@ -89,9 +89,9 @@ const FeaturedProducts = () => {
   }
 
   return (
-    <div className="w-full py-16 px-4 sm:px-8 bg-gradient-to-b from-gray-50 to-white">
+    <div className="w-full py-16 px-4 sm:px-8">
       <motion.h2
-        className="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center"
+        className="text-3xl md:text-4xl font-bold title mb-12 text-center"
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -134,7 +134,7 @@ const FeaturedProducts = () => {
         </Swiper>
       ) : (
         <motion.div
-          className="text-center py-12 text-gray-500"
+          className="text-center py-12 fonte1"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -151,7 +151,7 @@ const FeaturedProducts = () => {
       >
         <Link
           to="/produtos"
-          className="flex items-center gap-2 px-8 py-4 rounded-full font-bold bg-black text-white hover:bg-white hover:text-black border-2 border-black transition-all duration-300 shadow-lg hover:shadow-xl"
+          className="flex items-center gap-2 px-8 py-4 rounded-full font-bold topbar fonte2 border-2  transition-all duration-300 shadow-lg hover:shadow-xl"
         >
           Ver todos os produtos
           <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />

@@ -19,10 +19,10 @@ const CategoryBar = () => {
   }, []);
 
   return (
-    <section className="w-full py-8 px-4 sm:px-16 bg-white relative">
+    <section className="w-full py-8 px-4 sm:px-16 relative">
       {/* Título */}
       <motion.h2
-        className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6 text-center"
+        className="text-3xl sm:text-4xl font-extrabold title mb-6 text-center"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -45,8 +45,8 @@ const CategoryBar = () => {
                 key={idx}
                 className="
     flex-shrink-0 px-6 sm:px-8 py-4 rounded-2xl
-    bg-white shadow-md
-    flex items-center gap-3 text-gray-800 font-semibold whitespace-nowrap
+    card1 shadow-md
+    flex items-center gap-3 fonte2 font-semibold whitespace-nowrap
     min-w-[140px]
     transition-all duration-300
   "
@@ -63,7 +63,7 @@ const CategoryBar = () => {
               >
                 {/* Ícone com animação de leve movimento */}
                 <motion.div
-                  className="w-6 h-6 sm:w-7 sm:h-7 text-gray-600"
+                  className="w-6 h-6 sm:w-7 sm:h-7 fonte2"
                   whileHover={{ rotate: 10 }} // ícone gira levemente
                   transition={{ type: "spring", stiffness: 200 }}
                 >
@@ -72,14 +72,14 @@ const CategoryBar = () => {
 
                 {/* Texto com efeito de destaque ao hover */}
                 <motion.span
-                  whileHover={{ scale: 1.05, color: "#4F46E5" }} // muda cor do texto no hover
+                  whileHover={{ scale: 1.05, color: "#fonte2" }} // muda cor do texto no hover
                   transition={{ duration: 0.2 }}
                   className="text-base sm:text-lg font-medium"
                 >
                   {cat.name}
                 </motion.span>
               </motion.button>
-                
+
             );
           })}
         </motion.div>

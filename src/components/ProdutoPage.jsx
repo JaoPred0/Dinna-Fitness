@@ -111,9 +111,9 @@ const ProdutoPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center">
         <motion.div
-          className="text-gray-600 text-xl animate-pulse"
+          className="fonte2 text-xl animate-pulse"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -126,7 +126,7 @@ const ProdutoPage = () => {
 
   if (error || !produto) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center fonte2">
         <motion.div
           className="text-center text-gray-600 p-8 max-w-md"
           initial={{ opacity: 0, scale: 0.9 }}
@@ -146,10 +146,10 @@ const ProdutoPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white p-4 sm:p-8">
+    <div className="min-h-screen p-4 sm:p-8">
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 mb-6 text-gray-600 hover:text-black transition-colors w-fit border border-gray-200 px-3 py-2 rounded-lg"
+        className="flex items-center gap-2 mb-6 fonte1 hover:text-black transition-colors w-fit border border-gray-200 px-3 py-2 rounded-lg"
       >
         <ArrowLeft size={20} />
         Voltar
@@ -159,7 +159,7 @@ const ProdutoPage = () => {
         {/* Imagens */}
         <div className="flex-1 flex flex-col items-center space-y-6">
           <motion.div
-            className="relative w-full max-w-2xl h-96 sm:h-[500px] rounded-3xl overflow-hidden shadow-lg bg-gray-100 border border-gray-200"
+            className="relative w-full max-w-2xl h-96 sm:h-[500px] rounded-3xl overflow-hidden shadow-lg border border-gray-200"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
@@ -171,7 +171,7 @@ const ProdutoPage = () => {
                 className="w-full h-full object-cover transition-opacity duration-700"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400">
+              <div className="w-full h-full flex items-center justify-center fonte2">
                 Sem imagem disponível
               </div>
             )}
@@ -209,11 +209,11 @@ const ProdutoPage = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
+          <h1 className="text-3xl sm:text-4xl font-bold title">
             {produto.title}
           </h1>
 
-          <div className="text-3xl sm:text-4xl font-bold text-green-600 mb-4">
+          <div className="text-3xl sm:text-4xl font-bold fonte2 mb-4">
             R$ {parseFloat(produto.price).toFixed(2).replace(".", ",")}
           </div>
 
@@ -244,19 +244,19 @@ const ProdutoPage = () => {
 
           {/* Políticas */}
           {produto.policies && (
-            <div className="bg-gray-50 p-6 rounded-2xl border border-gray-200">
-              <h3 className="font-semibold text-gray-700 mb-3">
+            <div className="card3 p-6 rounded-2xl border border-gray-200">
+              <h3 className="font-semibold title mb-3">
                 Informações importantes:
               </h3>
-              <div className="space-y-2 text-sm text-gray-600">
+              <div className="space-y-2 text-sm fonte2">
                 <p>
-                  <span className="font-medium text-black">
+                  <span className="font-medium title">
                     Trocas e devoluções:
                   </span>{" "}
                   {produto.policies.returns}
                 </p>
                 <p>
-                  <span className="font-medium text-black">Rastreamento:</span>{" "}
+                  <span className="font-medium title">Rastreamento:</span>{" "}
                   {produto.policies.tracking}
                 </p>
               </div>
@@ -268,7 +268,7 @@ const ProdutoPage = () => {
             {/* Adicionar ao carrinho */}
             <motion.button
               onClick={handleAddToCart}
-              className="flex-1 px-6 py-4 rounded-2xl bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold text-lg shadow-lg transition-all duration-300 flex items-center justify-center gap-3"
+              className="flex-1 px-6 py-4 rounded-2xl card1 title font-bold text-lg shadow-lg transition-all duration-300 flex items-center justify-center gap-3"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -282,7 +282,7 @@ const ProdutoPage = () => {
                 handleAddToCart();
                 navigate("/checkout");
               }}
-              className="flex-1 px-6 py-4 rounded-2xl bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-bold text-lg shadow-lg transition-all duration-300 flex items-center justify-center gap-3"
+              className="flex-1 px-6 py-4 rounded-2xl card2 text-black font-bold text-lg shadow-lg transition-all duration-300 flex items-center justify-center gap-3"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

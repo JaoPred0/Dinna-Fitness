@@ -8,10 +8,10 @@ const NewsletterForm = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-2">
+      <h2 className="text-3xl sm:text-4xl font-bold title mb-2">
         Inscreva-se
       </h2>
-      <p className="text-gray-900 mb-6">
+      <p className="fonte2 mb-6">
         Receba as últimas novidades diretamente no seu e-mail.
       </p>
 
@@ -37,8 +37,7 @@ const NewsletterForm = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type="submit"
-          className="w-full px-4 py-3 rounded-xl bg-black text-white font-semibold shadow-md 
-          hover:bg-gray-900 transition-all"
+          className="w-full px-4 py-3 rounded-xl topbar fonte2 font-semibold shadow-md  transition-all"
         >
           Inscreva-se
         </motion.button>

@@ -199,7 +199,7 @@ const Perfil = () => {
 
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 flex flex-col items-center justify-center p-2 sm:p-4 md:py-6 md:p-8 lg:py-8">
+        <div className="min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 md:py-6 md:p-8 lg:py-8">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -208,7 +208,7 @@ const Perfil = () => {
             >
                 {/* Título responsivo */}
                 <motion.h1
-                    className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4 sm:mb-6 md:mb-8 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent leading-tight"
+                    className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4 sm:mb-6 md:mb-8 title bg-clip-text text-transparent leading-tight"
                     initial={{ scale: 0.9 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.2 }}
@@ -218,19 +218,19 @@ const Perfil = () => {
 
                 {/* Card Principal responsivo */}
                 <motion.div
-                    className="bg-white/90 backdrop-blur-md rounded-xl sm:rounded-2xl md:rounded-3xl shadow-lg sm:shadow-xl md:shadow-2xl overflow-hidden border border-gray-200/50 w-full"
+                    className="rounded-xl sm:rounded-2xl md:rounded-3xl shadow-lg sm:shadow-xl md:shadow-2xl overflow-hidden w-full"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
                 >
                     {/* Header com Avatar centralizado em mobile */}
-                    <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900/95 backdrop-blur-xl p-4 sm:p-6 md:p-8 text-white relative overflow-hidden">
-                        <div className="absolute inset-0 bg-black/10" />
+                    <div className="bg-gradient-to-r card1 backdrop-blur-xl p-4 sm:p-6 md:p-8 fonte2 relative overflow-hidden">
+                        <div className="absolute inset-0" />
                         <div className="relative z-10 flex flex-col items-center gap-2 sm:gap-3 md:gap-4">
                             <ProfileAvatar />
                             <div className="text-center px-1 sm:px-2">
                                 <h2 className="text-lg sm:text-xl md:text-2xl font-bold truncate w-full max-w-xs sm:max-w-none">{displayName || "Usuário Anônimo"}</h2>
-                                <p className="text-blue-100 opacity-90 text-xs sm:text-sm">{provider} Auth</p>
+                                <p className="fonte2 opacity-90 text-xs sm:text-sm">{provider} Auth</p>
                             </div>
                         </div>
                     </div>
@@ -244,12 +244,12 @@ const Perfil = () => {
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.4 }}
                         >
-                            <div className="bg-gray-50 p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl">
+                            <div className="p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl">
                                 <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
-                                    <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-gray-600 flex-shrink-0" />
-                                    <span className="font-semibold text-gray-700 text-xs sm:text-sm md:text-base">Email</span>
+                                    <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 fonte2 flex-shrink-0" />
+                                    <span className="font-semibold fonte2 text-xs sm:text-sm md:text-base">Email</span>
                                 </div>
-                                <p className="text-xs sm:text-sm text-gray-900 break-words overflow-hidden line-clamp-2">{user.email}</p>
+                                <p className="text-xs sm:text-sm fonte2 break-words overflow-hidden line-clamp-2">{user.email}</p>
                                 <div className="flex items-center gap-1 mt-1 sm:mt-2 flex-wrap">
                                     {user.emailVerified ? (
                                         <motion.span
@@ -275,30 +275,30 @@ const Perfil = () => {
 
                             </div>
 
-                            <div className="bg-gray-50 p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl">
+                            <div className=" p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl">
                                 <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
-                                    <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-gray-600 flex-shrink-0" />
-                                    <span className="font-semibold text-gray-700 text-xs sm:text-sm md:text-base">Tempo de Conta</span>
+                                    <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 fonte2 flex-shrink-0" />
+                                    <span className="font-semibold fonte2 text-xs sm:text-sm md:text-base">Tempo de Conta</span>
                                 </div>
-                                <p className="text-xs sm:text-sm text-gray-900 line-clamp-2">
+                                <p className="text-xs sm:text-sm fonte2 line-clamp-2">
                                     {getAccountAge(user.metadata.creationTime)} desde {formatFirebaseDate(user.metadata.creationTime)}
                                 </p>
                             </div>
 
-                            <div className="bg-gray-50 p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl">
+                            <div className=" p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl">
                                 <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
-                                    <LogIn className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-gray-600 flex-shrink-0" />
-                                    <span className="font-semibold text-gray-700 text-xs sm:text-sm md:text-base">Último Login</span>
+                                    <LogIn className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 fonte2 flex-shrink-0" />
+                                    <span className="font-semibold fonte2 text-xs sm:text-sm md:text-base">Último Login</span>
                                 </div>
-                                <p className="text-xs sm:text-sm text-gray-900 line-clamp-2">{lastLogin}</p>
+                                <p className="text-xs sm:text-sm fonte2 line-clamp-2">{lastLogin}</p>
                             </div>
 
-                            <div className="bg-gray-50 p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl md:col-span-2">
+                            <div className="p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl md:col-span-2">
                                 <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
                                     {accessLevel === "Admin" ? (
                                         <>
-                                            <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-blue-600 flex-shrink-0" />
-                                            <span className="font-semibold text-blue-700 text-xs sm:text-sm md:text-base">Nível de Acesso</span>
+                                            <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 fonte2 flex-shrink-0" />
+                                            <span className="font-semibold fonte2 text-xs sm:text-sm md:text-base">Nível de Acesso</span>
                                         </>
                                     ) : accessLevel === "Programador" ? (
                                         <>
@@ -308,11 +308,11 @@ const Perfil = () => {
                                     ) : (
                                         <>
                                             <User className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-gray-600 flex-shrink-0" />
-                                            <span className="font-semibold text-gray-700 text-xs sm:text-sm md:text-base">Tipo de Conta</span>
+                                            <span className="font-semibold fonte2 text-xs sm:text-sm md:text-base">Tipo de Conta</span>
                                         </>
                                     )}
                                 </div>
-                                <p className={`text-xs sm:text-sm text-gray-900 ${accessLevel === "Programador" ? "text-purple-900" : ""}`}>
+                                <p className={`text-xs sm:text-sm fonte2 ${accessLevel === "Programador" ? "text-purple-900" : ""}`}>
                                     {accessLevel}
                                 </p>
                             </div>
@@ -321,19 +321,19 @@ const Perfil = () => {
 
                         {/* Edição de Nome - Responsivo */}
                         <motion.div
-                            className="bg-blue-50 p-3 sm:p-4 md:p-6 rounded-lg sm:rounded-xl border border-blue-200"
+                            className=" p-3 sm:p-4 md:p-6 rounded-lg sm:rounded-xl"
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             transition={{ delay: 0.5, duration: 0.5 }}
                         >
                             <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3 md:mb-4">
-                                <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-blue-600 flex-shrink-0" />
-                                <h3 className="font-semibold text-blue-800 text-xs sm:text-sm md:text-base">Editar Nome de Exibição</h3>
+                                <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 fonte2 flex-shrink-0" />
+                                <h3 className="font-semibold fonte2 text-xs sm:text-sm md:text-base">Editar Nome de Exibição</h3>
                             </div>
                             <div className="flex flex-col gap-2 sm:gap-3">
                                 <input
                                     type="text"
-                                    className="px-3 py-3 sm:px-4 rounded-lg sm:rounded-xl bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-gray-900 placeholder-gray-500 text-sm w-full min-h-[40px] sm:min-h-[44px]"
+                                    className="px-3 py-3 sm:px-4 rounded-lg sm:rounded-xl  focus:border-transparent transition-all duration-300 text-gray-900 placeholder-gray-500 text-sm w-full min-h-[40px] sm:min-h-[44px]"
                                     value={displayName}
                                     onChange={(e) => setDisplayName(e.target.value)}
                                     placeholder="Digite seu nome preferido"
@@ -343,7 +343,7 @@ const Perfil = () => {
                                         <button
                                             onClick={handleUpdateProfile}
                                             disabled={isLoading || !displayName.trim()}
-                                            className="px-3 py-3 sm:px-4 sm:py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-lg sm:rounded-xl transition-all duration-300 flex items-center justify-center gap-2 disabled:cursor-not-allowed min-h-[40px] sm:min-h-[44px] text-sm"
+                                            className="px-3 py-3 sm:px-4 sm:py-3 font1 card2 font-semibold rounded-lg sm:rounded-xl transition-all duration-300 flex items-center justify-center gap-2 disabled:cursor-not-allowed min-h-[40px] sm:min-h-[44px] text-sm"
                                         >
                                             {isLoading ? (
                                                 <>
@@ -356,7 +356,7 @@ const Perfil = () => {
                                         </button>
                                         <button
                                             onClick={() => { setIsEditing(false); setDisplayName(user.displayName || ""); }}
-                                            className="px-3 py-3 sm:px-4 sm:py-3 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-lg sm:rounded-xl transition-all duration-300 min-h-[40px] sm:min-h-[44px] text-sm"
+                                            className="px-3 py-3 sm:px-4 sm:py-3 fonte2 card1 font-semibold rounded-lg sm:rounded-xl transition-all duration-300 min-h-[40px] sm:min-h-[44px] text-sm"
                                         >
                                             Cancelar
                                         </button>
@@ -364,7 +364,7 @@ const Perfil = () => {
                                 ) : (
                                     <button
                                         onClick={() => setIsEditing(true)}
-                                        className="px-3 py-3 sm:px-4 sm:py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg sm:rounded-xl transition-all duration-300 flex items-center justify-center gap-2 min-h-[40px] sm:min-h-[44px] text-sm"
+                                        className="px-3 py-3 sm:px-4 sm:py-3 card1 font-semibold rounded-lg sm:rounded-xl transition-all duration-300 flex items-center justify-center gap-2 min-h-[40px] sm:min-h-[44px] text-sm"
                                     >
                                         <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                         Editar
@@ -412,7 +412,7 @@ const Perfil = () => {
 
                 {/* Rodapé motivacional - Centralizado sempre */}
                 <motion.p
-                    className="text-center text-gray-600 mt-3 sm:mt-4 md:mt-6 italic text-xs sm:text-sm md:text-base px-2 leading-relaxed"
+                    className="text-center fonte1 mt-3 sm:mt-4 md:mt-6 italic text-xs sm:text-sm md:text-base px-2 leading-relaxed"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.7 }}

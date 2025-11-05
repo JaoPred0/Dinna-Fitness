@@ -2,7 +2,62 @@
 @import url('https://fonts.googleapis.com/css2?family=BBH+Sans+Bartle&family=Encode+Sans+Semi+Expanded:wght@100;200;300;400;500;600;700;800;900&family=Jost:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&family=Zalando+Sans+Expanded:ital,wght@0,200..900;1,200..900&display=swap');
 @import 'tailwindcss';
 
+:root {
+    --color1: #EEDCC4;
+    --color2: #A17053;
+    --color3: #EAEAEA;
+    --color4: #EAC4B8;
+    --color5: #1c1c1c;
+    --color6: #797979;
+    --color7: #2f2f2f;
+}
+
+body,
+html {
+    background-color: #ffffff;
+}
+
+header {
+    background-color: var(--color1);
+}
+
+.topbar {
+    background: var(--color4);
+    /* cor original */
+}
+
+header.scrolled {
+    background: var(--color5);
+}
+
+.fonte1 {
+    color: var(--color6);
+}
+
+.fonte2 {
+    color: var(--color7);
+}
+
+.fonte3 {
+    color: var(--color2);
+}
+
+.title {
+    color: var(--color5);
+}
+
+.card1 {
+    background-color: var(--color4);
+}
+
+.card2 {
+    background-color: var(--color2);
+}
+
+.card3 {
+    background-color: var(--color4);
+}
+
 #title-logo {
     font-family: "Zalando Sans Expanded", sans-serif;
 }
-

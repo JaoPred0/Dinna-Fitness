@@ -46,7 +46,7 @@ const SocialLinks = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <motion.h2 
-            className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3"
+            className="text-3xl sm:text-4xl font-bold title mb-3"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
